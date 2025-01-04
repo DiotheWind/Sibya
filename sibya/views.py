@@ -70,6 +70,19 @@ def delete_notice(request, id):
 
     return redirect("index")
 
+@login_required
+def join_notice(request, notice_id):
+    notice = get_object_or_404(Notice, id=notice_id)
+    notice.participants.add(request.user)
+
+    return redirect("view_notice", id=notice_id)
+
+@login_required
+def leave_notice(request, notice_id):
+    notice = get_object_or_404(Notice, id=notice_id)
+    notice.participants.remove(request.user)
+
+    return redirect("view_notice", id=notice_id)
 
 def register_view(request):
     if request.method == "POST":

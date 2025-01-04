@@ -3,12 +3,10 @@
 {% block nav_links %}
 <ul class="navbar-nav flex-row me-3 ms-auto">
     <li class="nav-item me-3">
-        <a class="nav-link text-light {% if request.resolver_match.url_name == 'index' %}text-decoration-underline{% endif %}"
-           href="{% url 'index' %}">Home</a>
+        <a class="nav-link text-light" href="{% url 'index' %}">Home</a>
     </li>
     <li class="nav-item me-3">
-        <a class="nav-link text-light {% if request.resolver_match.url_name == 'all_notices' %}text-decoration-underline{% endif %}"
-           href="{% url 'all_notices' %}">View Notices</a>
+        <a class="nav-link text-light" href="{% url 'all_notices' %}">View Notices</a>
     </li>
 </ul>
 {% endblock %}
@@ -59,9 +57,38 @@
                     <a href="{% url 'all_notices' %}" class="btn btn-outline-primary">
                         <i class="fas fa-arrow-left"></i> Back to Notices
                     </a>
-                    <a href="#" class="btn btn-primary">
-                        <i class="fas fa-bookmark"></i> Add this Event
-                    </a>
+                    {% if user in notice.participants.all %}
+                        <form method="POST" action="{% url 'leave_notice' notice.id %}">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-danger">
+                                <i class="fas fa-user-minus"></i> Leave Event
+                            </button>
+                        </form>
+                    {% else %}
+                        <form method="POST" action="{% url 'join_notice' notice.id %}">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-success">
+                                <i class="fas fa-user-plus"></i> Join Event
+                            </button>
+                        </form>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="mt-4">
+                <h5 class="mb-3 ms-3">Participants ({{ notice.participants.count }})</h5>
+                <div class="list-group">
+                    {% for participant in notice.participants.all %}
+                        <div class="list-group-item d-flex align-items-center">
+                            <i class="fas fa-user me-2"></i>
+                            {{ participant.name }}
+                        </div>
+                    {% empty %}
+                        <div class="list-group-item text-muted">
+                            <i class="fas fa-info-circle me-2"></i>
+                            No participants yet
+                        </div>
+                    {% endfor %}
                 </div>
             </div>
             <div class="card-footer text-muted">
