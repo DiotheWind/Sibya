@@ -1,20 +1,5 @@
 {% extends 'base_layout/base.html' %}
 
-{% block nav_links %}
-<ul class="navbar-nav flex-row me-3 ms-auto">
-    <li class="nav-item me-3">
-        <a class="nav-link text-light" href="{% url 'index' %}">Home</a>
-    </li>
-    <li class="nav-item me-3">
-        <a class="nav-link text-light" href="{% url 'all_notices' %}">View Notices</a>
-    </li>
-</ul>
-{% endblock %}
-
-{% block logout_link %}
-<a class="nav-link text-light" href="{% url 'logout' %}">Logout</a>
-{% endblock %}
-
 {% block content %}
 <div class="row justify-content-center">
     <div class="col-lg-8">
@@ -36,7 +21,11 @@
                     </div>
                     <div class="row mb-3">
                         <div class="col-md-6">
-                            <h6 class="text-muted mb-1">Schedule</h6>
+                            {% if notice.type == "Notice" %}
+                                <h6 class="text-muted mb-1">Schedule</h6>
+                            {% elif notice.type == "Recruitment" %}
+                                <h6 class="text-muted mb-1">Recruitment Deadline</h6>
+                            {% endif %}
                             <p class="fs-5">{{ notice.schedule|date:"F d, Y h:i A" }}</p>
                         </div>
                         <div class="col-md-6">

@@ -10,6 +10,7 @@ urlpatterns = [
     path("notice/<int:notice_id>/join/", views.join_notice, name="join_notice"),
     path('notice/<int:notice_id>/leave/', views.leave_notice, name='leave_notice'),
     path("add_notice/", views.add_notice, name="add_notice"),
+    path("notice_dashboard/", views.notice_dashboard, name="notice_dashboard"),
     path("register/", views.register_view, name="register"),
     path("login/", views.login_view, name="login"),
     path("logout/", views.logout_view, name="logout")

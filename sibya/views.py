@@ -7,10 +7,16 @@ from django.shortcuts import get_list_or_404, get_object_or_404
 
 @login_required(login_url="login")
 def index(request):
-    if request.user.is_president:
-        notices = Notice.objects.filter(author=request.user).order_by('-schedule')
-        return render(request, "index.html", {"notices": notices})
     return render(request, "index.html")
+
+@login_required(login_url="login")
+def notice_dashboard(request):
+    if not request.user.is_president:
+        return redirect("index")
+
+    notices = Notice.objects.filter(author=request.user).order_by("-schedule")
+
+    return render(request, "notice_dashboard.html", {"notices": notices})
 
 @login_required(login_url="login")
 def all_notice(request):
