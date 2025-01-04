@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required
-from .forms import RegisterForm, LoginForm
+from .forms import RegisterForm, LoginForm, NoticeForm
 from .models import Notice
 from django.shortcuts import get_list_or_404, get_object_or_404
 
@@ -18,6 +18,22 @@ def all_notice(request):
 def view_notice(request, id):
     notice = get_object_or_404(Notice, id=id)
     return render(request, "view_notice.html", {"notice": notice})
+
+@login_required(login_url="login")
+def add_notice(request):
+    if not request.user.is_president:
+        return redirect("index")
+
+    if request.method == "POST":
+        form = NoticeForm(request.POST)
+        if form.is_valid():
+            notice = form.save(commit=False)
+            notice.user = request.user
+            notice.save()
+            return redirect("all_notices")
+    else:
+        form = NoticeForm()
+    return render(request, "add_notice.html", {"form": form})
 
 def register_view(request):
     if request.method == "POST":
