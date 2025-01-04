@@ -7,6 +7,9 @@ from django.shortcuts import get_list_or_404, get_object_or_404
 
 @login_required(login_url="login")
 def index(request):
+    if request.user.is_president:
+        notices = Notice.objects.filter(user=request.user).order_by('-schedule')
+        return render(request, "index.html", {"notices": notices})
     return render(request, "index.html")
 
 @login_required(login_url="login")
@@ -34,6 +37,39 @@ def add_notice(request):
     else:
         form = NoticeForm()
     return render(request, "add_notice.html", {"form": form})
+
+@login_required(login_url="login")
+def edit_notice(request, id):
+    notice = get_object_or_404(Notice, id=id)
+
+    if not request.user.is_president or notice.user != request.user:
+        return redirect("index")
+
+    if request.method == "POST":
+        form = NoticeForm(request.POST, instance=notice)
+        if form.is_valid():
+            form.save()
+            return redirect("index")
+    else:
+        form = NoticeForm(instance=notice)
+
+    return render(request, "add_notice.html", {
+        "form": form,
+        "edit": True
+    })
+
+@login_required(login_url="login")
+def delete_notice(request, id):
+    notice = get_object_or_404(Notice, id=id)
+    if not request.user.is_president or notice.user != request.user:
+        return redirect("index")
+
+    if request.method == "POST":
+        notice.delete()
+        return redirect("index")
+
+    return redirect("index")
+
 
 def register_view(request):
     if request.method == "POST":
