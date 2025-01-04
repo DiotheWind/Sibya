@@ -1,7 +1,18 @@
 {% extends 'base_layout/base.html' %}
 
+{% block nav_links %}
+<ul class="navbar-nav flex-row me-3 ms-auto">
+    <li class="nav-item me-3">
+        <a class="nav-link text-light text-decoration-none" href="{% url 'index' %}">Home</a>
+    </li>
+    <li class="nav-item me-3">
+        <a class="nav-link text-light text-decoration-none" href="{% url 'all_notices' %}">View Notices</a>
+    </li>
+</ul>
+{% endblock %}
+
 {% block logout_link %}
-<a href="{% url 'logout' %}">Logout</a>
+<a class="nav-link text-light" href="{% url 'logout' %}">Logout</a>
 {% endblock %}
 
 {% block content %}

@@ -39,3 +39,21 @@ class User(AbstractBaseUser):
     @property
     def is_staff(self):
         return self.is_admin
+
+class Organization(models.Model):
+    name = models.CharField(max_length=75)
+
+    def __str__(self):
+        return self.name
+
+class Notice(models.Model):
+    title = models.CharField(max_length=255)
+    type = models.CharField(max_length=45, choices=[('Recruitment', 'Recruitment'), ('Notice', 'Notice')])
+    schedule = models.DateTimeField()
+    description = models.TextField()
+    location = models.CharField(max_length=100)
+    organization = models.ForeignKey(Organization, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.title
