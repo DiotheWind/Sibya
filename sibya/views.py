@@ -3,7 +3,7 @@ from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required
 from .forms import RegisterForm, LoginForm
 from .models import Notice
-from django.shortcuts import get_list_or_404
+from django.shortcuts import get_list_or_404, get_object_or_404
 
 @login_required(login_url="login")
 def index(request):
@@ -13,6 +13,11 @@ def index(request):
 def all_notice(request):
     notices = get_list_or_404(Notice.objects.order_by("schedule"))
     return render(request, "all_notice.html", {"notices": notices})
+
+@login_required(login_url="login")
+def view_notice(request, id):
+    notice = get_object_or_404(Notice, id=id)
+    return render(request, "view_notice.html", {"notice": notice})
 
 def register_view(request):
     if request.method == "POST":
