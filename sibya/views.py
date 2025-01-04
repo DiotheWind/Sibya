@@ -8,7 +8,7 @@ from django.shortcuts import get_list_or_404, get_object_or_404
 @login_required(login_url="login")
 def index(request):
     if request.user.is_president:
-        notices = Notice.objects.filter(user=request.user).order_by('-schedule')
+        notices = Notice.objects.filter(author=request.user).order_by('-schedule')
         return render(request, "index.html", {"notices": notices})
     return render(request, "index.html")
 
@@ -31,7 +31,7 @@ def add_notice(request):
         form = NoticeForm(request.POST)
         if form.is_valid():
             notice = form.save(commit=False)
-            notice.user = request.user
+            notice.author = request.user
             notice.save()
             return redirect("all_notices")
     else:
@@ -42,7 +42,7 @@ def add_notice(request):
 def edit_notice(request, id):
     notice = get_object_or_404(Notice, id=id)
 
-    if not request.user.is_president or notice.user != request.user:
+    if not request.user.is_president or notice.author != request.user:
         return redirect("index")
 
     if request.method == "POST":
@@ -61,7 +61,7 @@ def edit_notice(request, id):
 @login_required(login_url="login")
 def delete_notice(request, id):
     notice = get_object_or_404(Notice, id=id)
-    if not request.user.is_president or notice.user != request.user:
+    if not request.user.is_president or notice.author != request.user:
         return redirect("index")
 
     if request.method == "POST":

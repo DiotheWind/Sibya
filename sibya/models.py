@@ -54,7 +54,23 @@ class Notice(models.Model):
     description = models.TextField()
     location = models.CharField(max_length=100)
     organization = models.ForeignKey(Organization, on_delete=models.CASCADE)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    author = models.ForeignKey(User, on_delete=models.CASCADE)
+    # participants = models.ManyToManyField(User, through=)
 
     def __str__(self):
         return self.title
+
+# class Participant(models.Model):
+#     participant = models.ForeignKey(User, on_delete=models.CASCADE)
+#     event_joined = models.ForeignKey(Notice, on_delete=models.CASCADE)
+
+#     def __str__(self):
+#         return f"{self.participant.name} - {self.event_joined.title}"
+
+#     class Meta:
+#         contraints = [
+#             models.UniqueConstraint(
+#                 fields = ["participant", "event_joined"],
+#                 name = "unique_participant_event"
+#             )
+#         ]
