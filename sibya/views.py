@@ -5,6 +5,8 @@ from .forms import RegisterForm, LoginForm, NoticeForm, FeedbackForm
 from .models import Notice, Organization
 from django.db.models import Q
 from django.shortcuts import get_object_or_404
+from django.utils import timezone
+from datetime import timedelta
 
 @login_required(login_url="login")
 def index(request):
@@ -23,6 +25,13 @@ def notice_dashboard(request):
 def all_notice(request):
     notices = Notice.objects.all() # start will all notices
     organizations = Organization.objects.all() # get all organizations for the filter dropdown
+    current_time = timezone.now()
+
+    Notice.objects.filter(schedule__lt=current_time - timedelta(days=1)).delete()
+    notices = Notice.objects.filter(schedule__gte=current_time - timedelta(days=1))
+
+    for notice in notices:
+        notice.is_finished = notice.schedule < current_time
 
     # apply search filter
     search_query = request.GET.get("search", "")
@@ -53,7 +62,12 @@ def all_notice(request):
 @login_required(login_url="login")
 def view_notice(request, id):
     notice = get_object_or_404(Notice, id=id)
-    return render(request, "view_notice.html", {"notice": notice})
+    current_time = timezone.now()
+
+    return render(request, "view_notice.html", {
+        "notice": notice,
+        "current_time": current_time
+    })
 
 @login_required(login_url="login")
 def add_notice(request):

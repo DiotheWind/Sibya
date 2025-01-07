@@ -77,9 +77,15 @@
                 </div>
 
                 <div class="card-footer bg-transparent border-0 pb-3">
-                    <a href="{% url 'view_notice' notice.id %}" class="btn btn-outline-primary w-100">
-                        View Details <i class="fas fa-arrow-right ms-2"></i>
-                    </a>
+                    {% if notice.is_finished %}
+                        <button class="btn btn-secondary w-100" disabled>
+                            <i class="fas fa-clock me-2"></i>Event Finished
+                        </button>
+                    {% else %}
+                        <a href="{% url 'view_notice' notice.id %}" class="btn btn-outline-primary w-100">
+                            View Details <i class="fas fa-arrow-right ms-2"></i>
+                        </a>
+                    {% endif %}
                 </div>
             </div>
         </div>

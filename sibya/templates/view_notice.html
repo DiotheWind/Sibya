@@ -46,7 +46,11 @@
                     <a href="{% url 'all_notices' %}" class="btn btn-outline-primary">
                         <i class="fas fa-arrow-left"></i> Back to Notices
                     </a>
-                    {% if user in notice.participants.all %}
+                    {% if notice.schedule < current_time %}
+                        <button class="btn btn-secondary" disabled>
+                            <i class="fas fa-clock me-2"></i>Event Finished
+                        </button>
+                    {% elif user in notice.participants.all %}
                         <form method="POST" action="{% url 'leave_notice' notice.id %}">
                             {% csrf_token %}
                             <button type="submit" class="btn btn-danger">
@@ -64,22 +68,24 @@
                 </div>
             </div>
 
-            <div class="mt-4">
-                <h5 class="mb-3 ms-3">Participants ({{ notice.participants.count }})</h5>
-                <div class="list-group">
-                    {% for participant in notice.participants.all %}
-                        <div class="list-group-item d-flex align-items-center">
-                            <i class="fas fa-user me-2"></i>
-                            {{ participant.name }}
-                        </div>
-                    {% empty %}
-                        <div class="list-group-item text-muted">
-                            <i class="fas fa-info-circle me-2"></i>
-                            No participants yet
-                        </div>
-                    {% endfor %}
+            {% if not notice.schedule < current_time %}
+                <div class="mt-4">
+                    <h5 class="mb-3 ms-3">Participants ({{ notice.participants.count }})</h5>
+                    <div class="list-group">
+                        {% for participant in notice.participants.all %}
+                            <div class="list-group-item d-flex align-items-center">
+                                <i class="fas fa-user me-2"></i>
+                                {{ participant.name }}
+                            </div>
+                        {% empty %}
+                            <div class="list-group-item text-muted">
+                                <i class="fas fa-info-circle me-2"></i>
+                                No participants yet
+                            </div>
+                        {% endfor %}
+                    </div>
                 </div>
-            </div>
+            {% endif %}
             <div class="card-footer text-muted">
                 <small>Posted by: {{ notice.author.name }}</small>
             </div>
