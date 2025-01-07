@@ -26,21 +26,26 @@
                 {% if user.is_authenticated %}
                 <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
                     <li class="nav-item">
-                        <a class="nav-link text-light text-decoration-none py-2" href="{% url 'index' %}">Home</a>
+                        <a class="nav-link text-light {% if request.path == '/' %}text-decoration-underline{% endif %} py-2"
+                           href="{% url 'index' %}">Home</a>
                     </li>
                     {% if user.is_president %}
                     <li class="nav-item">
-                        <a class="nav-link text-light text-decoration-none py-2" href="{% url 'notice_dashboard' %}">Notice Dashboard</a>
+                        <a class="nav-link text-light {% if 'notice_dashboard' in request.path %}text-decoration-underline{% endif %} py-2"
+                           href="{% url 'notice_dashboard' %}">Notice Dashboard</a>
                     </li>
                     {% endif %}
                     <li class="nav-item">
-                        <a class="nav-link text-light text-decoration-none py-2" href="{% url 'all_notices' %}">View All Notices</a>
+                        <a class="nav-link text-light {% if 'notices' in request.path %}text-decoration-underline{% endif %} py-2"
+                           href="{% url 'all_notices' %}">View All Notices</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-light text-decoration-none py-2" href="{% url 'feedback' %}">Feedback Form</a>
+                        <a class="nav-link text-light {% if 'feedback' in request.path %}text-decoration-underline{% endif %} py-2"
+                           href="{% url 'feedback' %}">Feedback Form</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-light py-2" href="{% url 'logout' %}">Logout</a>
+                        <a class="nav-link text-light {% if 'logout' in request.path %}text-decoration-underline{% endif %} py-2"
+                           href="{% url 'logout' %}">Logout</a>
                     </li>
                 </ul>
                 {% endif %}
