@@ -1,10 +1,10 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required
-from .forms import RegisterForm, LoginForm, NoticeForm
+from .forms import RegisterForm, LoginForm, NoticeForm, FeedbackForm
 from .models import Notice, Organization
 from django.db.models import Q
-from django.shortcuts import get_list_or_404, get_object_or_404
+from django.shortcuts import get_object_or_404
 
 @login_required(login_url="login")
 def index(request):
@@ -116,6 +116,20 @@ def leave_notice(request, notice_id):
     notice.participants.remove(request.user)
 
     return redirect("view_notice", id=notice_id)
+
+@login_required
+def feedback_view(request):
+    if request.method == "POST":
+        form = FeedbackForm(request.POST)
+        if form.is_valid():
+            feedback = form.save(commit=False)
+            feedback.author = request.user
+            feedback.save()
+            return redirect("all_notices")
+    else:
+        form = FeedbackForm()
+
+    return render(request, "feedback_form.html", {"form": form})
 
 def register_view(request):
     if request.method == "POST":

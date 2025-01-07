@@ -1,6 +1,6 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
-from .models import User, Notice
+from .models import User, Notice, Feedback
 
 class RegisterForm(UserCreationForm):
     class Meta:
@@ -20,3 +20,8 @@ class NoticeForm(forms.ModelForm):
     class Meta:
         model = Notice
         fields = ["title", "type", "schedule", "description", "location", "organization"]
+
+class FeedbackForm(forms.ModelForm):
+    class Meta:
+        model = Feedback
+        fields = ["title", "body"]
