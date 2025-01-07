@@ -11,26 +11,35 @@
     <title>Sibya</title>
 </head>
 <body class="d-flex flex-column min-vh-100">
-    <nav class="navbar bg-primary mb-4">
+    <nav class="navbar navbar-expand-lg bg-primary mb-4">
         <div class="container">
             <a class="navbar-brand text-light fs-4" href="{% url 'index' %}">Sibya</a>
-            <div class="d-flex align-items-center">
-                {% if user.is_authenticated%}
-                <ul class="navbar-nav flex-row me-3 ms-auto">
-                    <li class="nav-item me-3">
-                        <a class="nav-link text-light text-decoration-none" href="{% url 'index' %}">Home</a>
+
+            <!-- Hamburger Button -->
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#navbarContent" aria-controls="navbarContent"
+                    aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarContent">
+                {% if user.is_authenticated %}
+                <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link text-light text-decoration-none py-2" href="{% url 'index' %}">Home</a>
                     </li>
                     {% if user.is_president %}
-                    <li class="nav-item me-3">
-                        <a class="nav-link text-light text-decoration-none" href="{% url 'notice_dashboard' %}">Notice Dashboard</a>
+                    <li class="nav-item">
+                        <a class="nav-link text-light text-decoration-none py-2" href="{% url 'notice_dashboard' %}">Notice Dashboard</a>
                     </li>
                     {% endif %}
-                    <li class="nav-item me-3">
-                        <a class="nav-link text-light text-decoration-none" href="{% url 'all_notices' %}">View All Notices</a>
+                    <li class="nav-item">
+                        <a class="nav-link text-light text-decoration-none py-2" href="{% url 'all_notices' %}">View All Notices</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-light py-2" href="{% url 'logout' %}">Logout</a>
                     </li>
                 </ul>
-
-                <a class="nav-link text-light" href="{% url 'logout' %}">Logout</a>
                 {% endif %}
             </div>
         </div>
@@ -41,9 +50,29 @@
         {% endblock %}
     </div>
 
-    <footer class="bg-primary text-white text-center pb-2 pt-3 mt-auto">
-        <p>&copy; <script>document.write(new Date().getFullYear());</script>. Sibya</p>
+    <footer class="bg-primary text-white text-center py-3 mt-auto">
+        <div class="container">
+            <p class="mb-0">&copy; <script>document.write(new Date().getFullYear());</script> Sibya</p>
+        </div>
     </footer>
+
+    <style>
+        @media (max-width: 991.98px) {
+            .navbar-collapse {
+                padding: 1rem 0;
+            }
+            .navbar-nav {
+                border-top: 1px solid rgba(255,255,255,0.1);
+                margin-top: 0.5rem;
+            }
+            .navbar-toggler {
+                border-color: rgba(255,255,255,0.5);
+            }
+            .navbar-toggler-icon {
+                background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%28255, 255, 255, 0.75%29' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+            }
+        }
+    </style>
 </body>
 </html>
 </footer>
