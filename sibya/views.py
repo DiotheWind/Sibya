@@ -2,7 +2,8 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required
 from .forms import RegisterForm, LoginForm, NoticeForm
-from .models import Notice
+from .models import Notice, Organization
+from django.db.models import Q
 from django.shortcuts import get_list_or_404, get_object_or_404
 
 @login_required(login_url="login")
@@ -20,8 +21,34 @@ def notice_dashboard(request):
 
 @login_required(login_url="login")
 def all_notice(request):
-    notices = get_list_or_404(Notice.objects.order_by("schedule"))
-    return render(request, "all_notice.html", {"notices": notices})
+    notices = Notice.objects.all() # start will all notices
+    organizations = Organization.objects.all() # get all organizations for the filter dropdown
+
+    # apply search filter
+    search_query = request.GET.get("search", "")
+    if search_query:
+        notices = notices.filter(
+            Q(title__icontains=search_query) |
+            Q(description__icontains=search_query) |
+            Q(organization__name__icontains=search_query)
+        )
+
+    # apply organization filter
+    org_id = request.GET.get("organization", "")
+    if org_id:
+        notices = notices.filter(organization_id = org_id)
+
+    # order by schedule
+    notices = notices.order_by("schedule")
+
+    context = {
+        "notices": notices,
+        "organizations": organizations,
+        "search_query": search_query
+    }
+
+    return render(request, "all_notice.html", context)
+
 
 @login_required(login_url="login")
 def view_notice(request, id):

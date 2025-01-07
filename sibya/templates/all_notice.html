@@ -2,15 +2,48 @@
 
 {% block content %}
 <div class="container py-4">
-    <!-- Search Bar -->
+    <!-- Search and Filters -->
     <div class="row mb-4">
         <div class="col-12">
-            <div class="input-group">
-                <input type="text" class="form-control" placeholder="Search notices...">
-                <button class="btn btn-primary" type="button">
-                    <i class="fas fa-search"></i>
-                </button>
-            </div>
+            <form method="get" action="{% url 'all_notices' %}" class="mb-4">
+                <div class="row g-3">
+                    <!-- Search Bar -->
+                    <div class="col-12 col-md-6">
+                        <div class="input-group">
+                            <input type="text" name="search" class="form-control" placeholder="Search notices..."
+                                   value="{{ request.GET.search|default:'' }}">
+                            <button class="btn btn-primary" type="submit">
+                                <i class="fas fa-search"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Type Filter -->
+                    <div class="col-12 col-md-3">
+                        <select name="type" class="form-select">
+                            <option value="">All Types</option>
+                            <option value="Recruitment" {% if request.GET.type == 'Recruitment' %}selected{% endif %}>
+                                Recruitment
+                            </option>
+                            <option value="Notice" {% if request.GET.type == 'Notice' %}selected{% endif %}>
+                                Notice
+                            </option>
+                        </select>
+                    </div>
+
+                    <!-- Organization Filter -->
+                    <div class="col-12 col-md-3">
+                        <select name="organization" class="form-select">
+                            <option value="">All Organizations</option>
+                            {% for org in organizations %}
+                            <option value="{{ org.id }}" {% if request.GET.organization == org.id|stringformat:"i" %}selected{% endif %}>
+                                {{ org.name }}
+                            </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+            </form>
         </div>
     </div>
 
@@ -51,9 +84,15 @@
             </div>
         </div>
         {% empty %}
-        <div class="col-12 text-center py-5">
-            <i class="fas fa-clipboard-list fa-3x text-muted mb-3"></i>
-            <h4 class="text-muted">No notices available</h4>
+        <div class="container h-100">
+            <div class="row h-75 align-items-center justify-content-center">
+                <div class="col-12 text-center">
+                    <div class="my-5">
+                        <i class="fas fa-clipboard-list fa-4x text-muted mb-4 d-block"></i>
+                        <h4 class="text-muted">No notices available</h4>
+                    </div>
+                </div>
+            </div>
         </div>
         {% endfor %}
     </div>
@@ -79,10 +118,20 @@
         padding: 0.5rem 1rem;
         font-weight: 500;
     }
+    .form-select:focus {
+        border-color: #86b7fe;
+        box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+    }
+    .h-75 {
+        min-height: 75vh;
+    }
     @media (max-width: 768px) {
         .container {
             padding-left: 1rem;
             padding-right: 1rem;
+        }
+        .input-group {
+            margin-bottom: 1rem;
         }
     }
 </style>
