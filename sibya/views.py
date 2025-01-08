@@ -20,8 +20,12 @@ def notice_dashboard(request):
         return redirect("index")
 
     notices = Notice.objects.filter(author=request.user).order_by("-schedule")
+    notice_history = Notice.history.filter(author=request.user).order_by("-history_date")
 
-    return render(request, "notice_dashboard.html", {"notices": notices})
+    return render(request, "notice_dashboard.html", {
+        "notices": notices,
+        "notice_history": notice_history
+    })
 
 @login_required(login_url="login")
 def all_notice(request):
