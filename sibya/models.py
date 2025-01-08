@@ -1,5 +1,6 @@
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 from django.db import models
+from simple_history.models import HistoricalRecords
 
 class UserManager(BaseUserManager):
     def create_user(self, email, name, password=None):
@@ -56,6 +57,7 @@ class Notice(models.Model):
     organization = models.ForeignKey(Organization, on_delete=models.CASCADE)
     author = models.ForeignKey(User, on_delete=models.CASCADE)
     participants = models.ManyToManyField(User, related_name="participated_notices", blank=True)
+    history = HistoricalRecords()
 
     def __str__(self):
         return self.title
