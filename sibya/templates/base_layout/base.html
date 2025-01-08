@@ -44,6 +44,10 @@
                            href="{% url 'feedback' %}">Feedback Form</a>
                     </li>
                     <li class="nav-item">
+                        <a class="nav-link text-light {% if 'manual' in request.path %}text-decoration-underline{% endif %} py-2"
+                           href="{% url 'manual' %}" target="_blank">Manual</a>
+                    </li>
+                    <li class="nav-item">
                         <a class="nav-link text-light {% if 'logout' in request.path %}text-decoration-underline{% endif %} py-2"
                            href="{% url 'logout' %}">Logout</a>
                     </li>

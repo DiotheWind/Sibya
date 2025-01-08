@@ -7,6 +7,8 @@ from django.db.models import Q
 from django.shortcuts import get_object_or_404
 from django.utils import timezone
 from datetime import timedelta
+from django.http import FileResponse, Http404
+import os
 
 @login_required(login_url="login")
 def index(request):
@@ -144,6 +146,12 @@ def feedback_view(request):
         form = FeedbackForm()
 
     return render(request, "feedback_form.html", {"form": form})
+
+@login_required
+def manual(request):
+    pdf_path = os.path.join(os.path.dirname(__file__), "static/manual/manual.pdf")
+
+    return FileResponse(open(pdf_path, 'rb'), content_type="application/pdf")
 
 def register_view(request):
     if request.method == "POST":
