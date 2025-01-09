@@ -8,6 +8,7 @@ from django.shortcuts import get_object_or_404
 from django.utils import timezone
 from datetime import timedelta
 from django.http import FileResponse, Http404
+from django.contrib import messages
 import os
 
 @login_required(login_url="login")
@@ -86,7 +87,8 @@ def add_notice(request):
             notice = form.save(commit=False)
             notice.author = request.user
             notice.save()
-            return redirect("all_notices")
+            messages.success(request, f'Notice "{notice.title}" has been created')
+            return redirect("notice_dashboard")
     else:
         form = NoticeForm()
     return render(request, "add_notice.html", {"form": form})
@@ -102,7 +104,8 @@ def edit_notice(request, id):
         form = NoticeForm(request.POST, instance=notice)
         if form.is_valid():
             form.save()
-            return redirect("index")
+            messages.warning(request, f'Notice "{notice.title}" has been updated')
+            return redirect("notice_dashboard")
     else:
         form = NoticeForm(instance=notice)
 
@@ -118,8 +121,10 @@ def delete_notice(request, id):
         return redirect("index")
 
     if request.method == "POST":
+        title = notice.title
         notice.delete()
-        return redirect("index")
+        messages.error(request, f'Notice "{title}" has been deleted')
+        return redirect("notice_dashboard")
 
     return redirect("index")
 
