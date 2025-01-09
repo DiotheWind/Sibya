@@ -56,7 +56,7 @@ class Notice(models.Model):
     location = models.CharField(max_length=100)
     organization = models.ForeignKey(Organization, on_delete=models.CASCADE)
     author = models.ForeignKey(User, on_delete=models.CASCADE)
-    participants = models.ManyToManyField(User, related_name="participated_notices", blank=True)
+    interested = models.ManyToManyField(User, related_name="interested_participants", blank=True)
     history = HistoricalRecords()
 
     def __str__(self):

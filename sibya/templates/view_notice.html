@@ -50,18 +50,18 @@
                         <button class="btn btn-secondary" disabled>
                             <i class="fas fa-clock me-2"></i>Event Finished
                         </button>
-                    {% elif user in notice.participants.all %}
+                    {% elif user in notice.interested.all %}
                         <form method="POST" action="{% url 'leave_notice' notice.id %}">
                             {% csrf_token %}
                             <button type="submit" class="btn btn-danger">
-                                <i class="fas fa-user-minus"></i> Leave Event
+                                <i class="fas fa-user-minus"></i> Not interested anymore
                             </button>
                         </form>
                     {% else %}
                         <form method="POST" action="{% url 'join_notice' notice.id %}">
                             {% csrf_token %}
                             <button type="submit" class="btn btn-success">
-                                <i class="fas fa-user-plus"></i> Join Event
+                                <i class="fas fa-user-plus"></i> I'm interested!
                             </button>
                         </form>
                     {% endif %}
@@ -70,17 +70,17 @@
 
             {% if not notice.schedule < current_time %}
                 <div class="mt-4">
-                    <h5 class="mb-3 ms-3">Participants ({{ notice.participants.count }})</h5>
+                    <h5 class="mb-3 ms-3">Interested ({{ notice.interested.count }})</h5>
                     <div class="list-group">
-                        {% for participant in notice.participants.all %}
+                        {% for student in notice.interested.all %}
                             <div class="list-group-item d-flex align-items-center">
                                 <i class="fas fa-user me-2"></i>
-                                {{ participant.name }}
+                                {{ student.name }}
                             </div>
                         {% empty %}
                             <div class="list-group-item text-muted">
                                 <i class="fas fa-info-circle me-2"></i>
-                                No participants yet
+                                No interested students yet
                             </div>
                         {% endfor %}
                     </div>

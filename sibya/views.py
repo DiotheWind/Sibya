@@ -126,14 +126,14 @@ def delete_notice(request, id):
 @login_required
 def join_notice(request, notice_id):
     notice = get_object_or_404(Notice, id=notice_id)
-    notice.participants.add(request.user)
+    notice.interested.add(request.user)
 
     return redirect("view_notice", id=notice_id)
 
 @login_required
 def leave_notice(request, notice_id):
     notice = get_object_or_404(Notice, id=notice_id)
-    notice.participants.remove(request.user)
+    notice.interested.remove(request.user)
 
     return redirect("view_notice", id=notice_id)
 

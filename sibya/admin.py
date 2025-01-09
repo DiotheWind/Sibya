@@ -12,7 +12,7 @@ class NoticeAdmin(SimpleHistoryAdmin):
     list_filter = ('type', 'organization', 'schedule')
     search_fields = ('title', 'description', 'author__name', 'organization__name')
     readonly_fields = ('author',)
-    filter_horizontal = ('participants',)
+    filter_horizontal = ('interested',)
 
 @admin.register(Feedback)
 class FeedbackAdmin(SimpleHistoryAdmin):
