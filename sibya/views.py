@@ -128,6 +128,17 @@ def delete_notice(request, id):
 
     return redirect("index")
 
+@login_required(login_url="login")
+def clear_history(request):
+    if not request.user.is_president:
+        return redirect("index")
+
+    if request.method == "POST":
+        Notice.history.filter(history_user=request.user).delete()
+        messages.warning(request, "Notice history has been cleared")
+
+    return redirect("notice_dashboard")
+
 @login_required
 def join_notice(request, notice_id):
     notice = get_object_or_404(Notice, id=notice_id)
