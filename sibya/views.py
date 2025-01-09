@@ -30,8 +30,6 @@ def notice_dashboard(request):
     notices = Notice.objects.filter(author=request.user).order_by("-schedule")
     notice_history = Notice.history.filter(author=request.user).order_by("-history_date")
 
-
-
     return render(request, "notice_dashboard.html", {
         "notices": notices,
         "notice_history": notice_history
