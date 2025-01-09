@@ -13,15 +13,24 @@ import os
 
 @login_required(login_url="login")
 def index(request):
-    return render(request, "index.html")
+    interested_notices = request.user.interested_participants.all().order_by('schedule')
+
+    return render(request, "index.html", {
+        "interested_notices": interested_notices
+    })
 
 @login_required(login_url="login")
 def notice_dashboard(request):
     if not request.user.is_president:
         return redirect("index")
 
+    current_time = timezone.now()
+    Notice.objects.filter(schedule__lt=current_time - timedelta(hours=12)).delete()
+
     notices = Notice.objects.filter(author=request.user).order_by("-schedule")
     notice_history = Notice.history.filter(author=request.user).order_by("-history_date")
+
+
 
     return render(request, "notice_dashboard.html", {
         "notices": notices,
@@ -34,8 +43,9 @@ def all_notice(request):
     organizations = Organization.objects.all() # get all organizations for the filter dropdown
     current_time = timezone.now()
 
-    Notice.objects.filter(schedule__lt=current_time - timedelta(days=1)).delete()
-    notices = Notice.objects.filter(schedule__gte=current_time - timedelta(days=1))
+    # Delete notices that are more than 12 hours past their schedule
+    Notice.objects.filter(schedule__lt=current_time - timedelta(hours=12)).delete()
+    notices = Notice.objects.filter(schedule__gte=current_time - timedelta(hours=12))
 
     for notice in notices:
         notice.is_finished = notice.schedule < current_time
