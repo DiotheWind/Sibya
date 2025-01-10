@@ -34,7 +34,7 @@ class UserAdmin(BaseUserAdmin):
         return request.user.is_superuser
 
 @admin.register(Organization)
-class OrganizationAdmin(admin.ModelAdmin):
+class OrganizationAdmin(SimpleHistoryAdmin):
     list_display = ('name',)
     search_fields = ('name',)
 

@@ -41,6 +41,7 @@ class User(AbstractBaseUser, PermissionsMixin):
 
 class Organization(models.Model):
     name = models.CharField(max_length=75)
+    history = HistoricalRecords()
 
     def __str__(self):
         return self.name
