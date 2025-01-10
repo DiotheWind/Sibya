@@ -48,7 +48,7 @@ class Organization(models.Model):
 
 class Notice(models.Model):
     title = models.CharField(max_length=255)
-    type = models.CharField(max_length=45, choices=[('Recruitment', 'Recruitment'), ('Notice', 'Notice')])
+    type = models.CharField(max_length=45, choices=[('Recruitment', 'Recruitment'), ('Event', 'Event')])
     schedule = models.DateTimeField()
     description = models.TextField()
     location = models.CharField(max_length=100)

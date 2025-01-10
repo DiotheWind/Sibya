@@ -62,7 +62,12 @@ def all_notice(request):
     if org_id:
         notices = notices.filter(organization_id = org_id)
 
-    # order by schedule
+    # apply type filter
+    type_filter = request.GET.get("type", "")
+    if type_filter:
+        notices = notices.filter(type=type_filter)
+
+    # order by schedule closest first
     notices = notices.order_by("schedule")
 
     context = {
