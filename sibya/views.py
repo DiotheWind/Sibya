@@ -174,6 +174,7 @@ def feedback_view(request):
             feedback = form.save(commit=False)
             feedback.author = request.user
             feedback.save()
+            messages.success(request, "Your feedback has been submitted.")
             return redirect("all_notices")
     else:
         form = FeedbackForm()
