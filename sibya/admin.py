@@ -3,6 +3,10 @@ from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from .models import *
 from simple_history.admin import SimpleHistoryAdmin
 
+admin.site.site_header = "Sibya"
+admin.site.site_title = "Sibya"
+admin.site.index_title = "Administrator's Access"
+
 @admin.register(User)
 class UserAdmin(BaseUserAdmin):
     model = User
