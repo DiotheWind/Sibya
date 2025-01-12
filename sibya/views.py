@@ -104,7 +104,12 @@ def add_notice(request):
             return redirect("notice_dashboard")
     else:
         form = NoticeForm()
-    return render(request, "add_notice.html", {"form": form})
+    return render(request, "add_notice.html", {
+        "form": form,
+        "title_text": "Sibya | Add Notice",
+        "heading_text": "Create Notice",
+        "button_text": "Submit"
+    })
 
 @login_required(login_url="login")
 def edit_notice(request, id):
@@ -124,7 +129,9 @@ def edit_notice(request, id):
 
     return render(request, "add_notice.html", {
         "form": form,
-        "edit": True
+        "title_text": "Sibya | Edit Notice",
+        "heading_text": "Edit Notice",
+        "button_text": "Save Changes"
     })
 
 @login_required(login_url="login")
