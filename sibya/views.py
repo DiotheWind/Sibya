@@ -21,11 +21,11 @@ def index(request):
 
 @login_required(login_url="login")
 def notice_dashboard(request):
-    if not request.user.is_president:
+    if not request.user.is_president: # Only presidents have access
         return redirect("index")
 
     current_time = timezone.now()
-    Notice.objects.filter(schedule__lt=current_time - timedelta(hours=12)).delete()
+    Notice.objects.filter(schedule__lt=current_time - timedelta(hours=12)).delete() # Automatically delete notices 12 hours past its schedule
 
     notices = Notice.objects.filter(author=request.user).order_by("-schedule")
     notice_history = Notice.history.filter(author=request.user).order_by("-history_date")
@@ -91,7 +91,7 @@ def view_notice(request, id):
 
 @login_required(login_url="login")
 def add_notice(request):
-    if not request.user.is_president:
+    if not request.user.is_president: # Only presidents can access this page
         return redirect("index")
 
     if request.method == "POST":
@@ -110,7 +110,7 @@ def add_notice(request):
 def edit_notice(request, id):
     notice = get_object_or_404(Notice, id=id)
 
-    if not request.user.is_president or notice.author != request.user:
+    if not request.user.is_president or notice.author != request.user: # Only presidents who authored that specific notice can access this view
         return redirect("index")
 
     if request.method == "POST":
@@ -130,7 +130,7 @@ def edit_notice(request, id):
 @login_required(login_url="login")
 def delete_notice(request, id):
     notice = get_object_or_404(Notice, id=id)
-    if not request.user.is_president or notice.author != request.user:
+    if not request.user.is_president or notice.author != request.user: # Only presidents who authored that specific notice can access this view
         return redirect("index")
 
     if request.method == "POST":
@@ -141,6 +141,7 @@ def delete_notice(request, id):
 
     return redirect("index")
 
+# Clear president's notice audit trail
 @login_required(login_url="login")
 def clear_history(request):
     if not request.user.is_president:

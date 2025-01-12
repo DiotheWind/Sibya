@@ -62,16 +62,14 @@ class NoticeAdmin(SimpleHistoryAdmin):
     readonly_fields = ('author',)
     filter_horizontal = ('interested',)
 
+    # Staff can only delete notices (supeusers can do anything)
     def has_add_permission(self, request):
-        # Only superusers can add notices
         return request.user.is_superuser
 
     def has_change_permission(self, request, obj=None):
-        # Only superusers can edit notices
         return request.user.is_superuser
 
     def has_delete_permission(self, request, obj=None):
-        # Both superusers and staff can delete notices
         return True
 
 @admin.register(Feedback)
@@ -81,14 +79,12 @@ class FeedbackAdmin(SimpleHistoryAdmin):
     search_fields = ('title', 'body', 'author__name')
     readonly_fields = ('date_submitted',)
 
+    # Staff can only delete feedbacks (supeusers can do anything)
     def has_add_permission(self, request):
-        # Only superusers can add feedback
         return request.user.is_superuser
 
     def has_change_permission(self, request, obj=None):
-        # Only superusers can edit feedback
         return request.user.is_superuser
 
     def has_delete_permission(self, request, obj=None):
-        # Both superusers and staff can delete feedback
         return True

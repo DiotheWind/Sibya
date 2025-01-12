@@ -52,7 +52,6 @@
         {% for notice in notices %}
         <div class="col">
             <div class="card h-100 shadow-sm hover-shadow transition">
-                <!-- Notice Type Badge -->
                 <div class="card-header bg-transparent border-0">
                     <span class="badge {% if notice.type == 'Recruitment' %}bg-success{% else %}bg-info{% endif %}">
                         {{ notice.type }}

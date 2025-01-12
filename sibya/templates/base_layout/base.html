@@ -29,6 +29,7 @@
         {% endif %}
     </div>
 
+    <!-- Header -->
     <nav class="navbar navbar-expand-lg bg-primary mb-4">
         <div class="container">
             <a class="navbar-brand text-light fs-4" href="{% url 'index' %}">Sibya</a>
@@ -75,11 +76,13 @@
         </div>
     </nav>
 
+    <!-- Content -->
     <div class="container mb-5">
         {% block content %}
         {% endblock %}
     </div>
 
+    <!-- Footer -->
     <footer class="bg-primary text-white text-center py-3 mt-auto">
         <div class="container">
             <p class="mb-0">&copy; <script>document.write(new Date().getFullYear());</script> Sibya</p>
@@ -117,7 +120,7 @@
             background-color: #f1c40f !important;
             opacity: 1 !important;
         }
-        .bg-error, .bg-danger {  /* Add both error and danger classes */
+        .bg-error, .bg-danger {
             background-color: #e74c3c !important;
             opacity: 1 !important;
         }
